@@ -1,0 +1,28 @@
+Vagrant.configure("2") do |config|
+
+#Create Zabbix server
+    config.vm.define "Z-serv" do |zserv|
+	zserv.vm.box = "sbeliakou/centos"
+	zserv.vm.hostname = "Z-serv"
+	zserv.vm.network :private_network, ip: "192.168.77.21"
+	zserv.vm.provider "virtualbox" do |vb|
+	    vb.gui = false
+	    vb.memory = "2048"
+	    vb.name = "Z-serv"
+	end
+	zserv.vm.provision "shell", path: "zabbix_server.sh"
+    end
+
+#Create Zabbix Agent 
+    config.vm.define "Z-agent" do |zag|
+	zag.vm.box = "sbeliakou/centos"
+	zag.vm.hostname = "zagent"
+	zag.vm.network :private_network, ip: "192.168.77.22"
+	zag.vm.provider "virtualbox" do |vb|
+	    vb.gui = false
+	    vb.memory = "4096"
+	    vb.name = "zagent"
+	end
+	zag.vm.provision "shell", path: "zabbix_agent.sh"
+    end
+end
